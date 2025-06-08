@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+        "name": "Cuenta Admin",
+        "email": "admin@apr.cl",
+        "password": "Admin@123",
+        "role": "admin"
+    },
+    {
+        "name": "Cuenta Cliente",
+        "email": "cliente@apr.cl",
+        "password": "Cliente$456",
+        "role": "cliente"
+    },
+    {
+        "name": "Cuenta Funcionario",
+        "email": "funcionario@apr.cl",
+        "password": "Func#789",
+        "role": "funcionario"
+    },
+    {
+        "name": "Cuenta Técnico",
+        "email": "tecnico@apr.cl",
+        "password": "Tecnico!012",
+        "role": "tecnico"
+    }
+  ]
+}

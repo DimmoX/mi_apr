@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home Page</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+        <link rel="stylesheet" href="assets/css/style.css">
+        <script src="assets/js/components.js" defer></script>
+        <script src="assets/js/main.js" defer></script>
+        <script src="assets/js/validaciones.js" defer></script>
+    </head>
+    <body>
+        <div id="navbar"></div>
+        <main class="container">
+            <div id="header"></div>
+            <section class="row g-4 mt-1">
+                <!-- Columna izquierda -->
+                <section class="col-12 col-md-4">
+                    <!-- Aviso de mantención -->
+                    <article class="card shadow-sm mb-3">
+                        <div class="card-body">
+                            <h2 class="h5 card-title text-secondary-custom">Mantención programada</h2>
+                            <p class="card-text">
+                                <strong>Fecha:</strong> 14 de junio, 09:00-13:00 hrs.<br>
+                                <strong>Sector:</strong> Villa Los Aromos – Tramo B.<br>
+                                Se realizará limpieza preventiva de tuberías y revisión de válvulas.
+                                Durante este periodo el suministro podrá presentar baja presión. 
+                                ¡Gracias por su comprensión!
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- Información sobre la calidad del agua -->
+                    <article class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="h5 card-title text-success-custom">Boletín de calidad del agua</h2>
+                            <p class="card-text">
+                                <em>Resumen mayo 2025:</em><br>
+                                • Turbidez promedio: 0,53 NTU (norma &lt; 2 NTU)<br>
+                                • Cloro residual: 0,35 mg/L (norma 0,2 – 1,5 mg/L)<br>
+                                • pH: 7,3<br>
+                                Todos los parámetros se mantienen dentro de los rangos recomendados
+                                por el MINSAL.
+                            </p>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- Columna centro -->
+                <section class="col-12 col-md-4">
+                    <!-- Información sobre la plataforma -->
+                    <div class="p-4 bg-light rounded shadow-sm h-100">
+                        <h2 class="h4 mb-3 text-center">Sobre la plataforma</h2>
+                        <p>
+                            Este portal ha sido diseñado para que los socios de nuestra
+                            <strong>Asociación de Agua Potable Rural (APR)</strong> puedan:
+                        </p>
+                        <ul>
+                            <li>Consultar boletas y estados de pago en línea.</li>
+                            <li>Revisar las lecturas de consumo histórico.</li>
+                            <li>Recibir comunicados sobre cortes, mantenciones y novedades.</li>
+                            <li>Gestionar usuarios y roles internos (administrador, tesorero, técnico).</li>
+                        </ul>
+                        <p class="mb-0">
+                            El objetivo principal es aumentar la transparencia,
+                            mejorar la comunicación y facilitar los trámites
+                            sin necesidad de asistir a la oficina de la APR.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ASIDE DERECHO -->
+                <aside class="col-12 col-md-4">
+                    <!-- Noticias breves / positivo -->
+                    <div class="alert alert-custom-info shadow-sm" role="alert">
+                        <strong>¡Buenas noticias!</strong> A partir de julio la APR contará con un
+                        nuevo estanque de 100 m³ que garantizará el suministro en periodos de
+                        alta demanda.
+                    </div>
+
+                    <!-- Problemas reportados -->
+                    <div class="alert alert-custom-warning shadow-sm" role="alert">
+                        <strong>Incidencia en curso:</strong> Se detectó filtración menor en ramal
+                        El Bosque. Nuestro equipo técnico ya está trabajando y se espera
+                        normalizar el servicio antes de las 18:00 hrs.
+                    </div>
+
+                    <!-- Enlaces rápidos -->
+                    <div class="list-group shadow-sm">
+                        <a href="javascript:void(0)" class="list-group-item list-group-item-action">
+                            Últimas lecturas de medidor
+                        </a>
+                        <a href="javascript:void(0)" class="list-group-item list-group-item-action">
+                            Manual de buenas prácticas de consumo
+                        </a>
+                        <a href="javascript:void(0)" class="list-group-item list-group-item-action">
+                            Contacto de emergencias (24/7)
+                        </a>
+                    </div>
+                </aside>
+            </section>
+        </main>
+
+        <div id="footer"></div>
+
+        <!-- scripts bootstrap -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    </body>
+</html>

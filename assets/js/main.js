@@ -1,0 +1,61 @@
+// Función para marcar el link activo según la página actual
+function setActiveNavLink() {
+    const currentPath = window.location.pathname;
+    const currentPage = currentPath.split('/').pop() || 'index.html';
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link[data-page]');
+    
+    navLinks.forEach(link => {
+        // Remover clase active de todos los links
+        link.classList.remove('active');
+        link.removeAttribute('aria-current');
+        
+        // Obtener la página del atributo data-page
+        const linkPage = link.getAttribute('data-page');
+        
+        // Verificar si coincide con la página actual
+        if (linkPage === currentPage || 
+            (currentPage === 'index.html' && linkPage === 'index.html') ||
+            (currentPage === '' && linkPage === 'index.html')) {
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
+        }
+    });
+}
+
+// Escuchar cuando se carga el navbar para activar la detección de página activa
+document.addEventListener('componentLoaded', function(event) {
+    if (event.detail.elementId === 'navbar') {
+        // Usar requestAnimationFrame para asegurar que el DOM esté completamente renderizado
+        requestAnimationFrame(() => {
+            // Configurar todas las rutas del navbar
+            setupNavbarPaths();
+            // Luego establecer el enlace activo
+            setActiveNavLink();
+        });
+    }
+});
+
+// Fallback para cuando no se use el sistema de componentes
+window.addEventListener('load', () => {
+    // Solo ejecutar si no se han cargado componentes dinámicamente
+    setTimeout(() => {
+        const existingActiveLinks = document.querySelectorAll('.navbar-nav .nav-link.active');
+        if (existingActiveLinks.length === 0) {
+            setActiveNavLink();
+        }
+    }, 100);
+});
+
+// Manejar enlaces que aún no tienen funcionalidad
+document.addEventListener('DOMContentLoaded', function() {
+    // Seleccionar todos los enlaces que usan javascript:void(0)
+    const placeholderLinks = document.querySelectorAll('a[href="javascript:void(0)"]');
+    
+    placeholderLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Sin alert - no hace nada por ahora
+            // console.log('Enlace clickeado:', link.textContent.trim());
+        });
+    });
+});
