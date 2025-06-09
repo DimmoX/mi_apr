@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg fixed-top mb-5">
-  <div class="container-fluid">
+  <div class="container-fluid px-5 pe-5">
     <!-- Logo y Nombre -->
     <div class="d-flex align-items-center">
       <img id="logo" class="logo me-2" src="" alt="Logo">
@@ -16,15 +16,65 @@
 
     <!-- Menú colapsable -->
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav flex-row w-100 gap-4 justify-content-center justify-content-lg-end ms-lg-auto">
+      <ul class="navbar-nav flex-row w-100 gap-4 justify-content-center justify-content-lg-end ms-lg-auto nav-underline">
         <li class="nav-item">
           <a class="nav-link text-white" href="" data-page="index.html">Inicio</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-white" href="" data-page="contact.html">Contacto</a>
         </li>
-        <li class="nav-item">
+        <!-- Enlace "Iniciar Sesión" (visible cuando NO está logueado) -->
+        <li class="nav-item" id="login-nav-item">
           <a class="nav-link text-white" href="" data-page="login.html">Iniciar Sesión</a>
+        </li>
+        
+        <!-- Dropdown de Usuario (visible cuando SÍ está logueado) -->
+        <li class="nav-item dropdown" id="user-dropdown-nav" style="display: none;">
+          <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" role="button" 
+             data-bs-toggle="dropdown" aria-expanded="false" id="user-dropdown-toggle">
+            <!-- <span class="user-icon me-2">👤</span> -->
+            <span id="user-name"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <h6 class="dropdown-header">
+                <span class="user-icon me-2">👤</span>
+                <span id="user-full-name">Nombre Usuario</span>
+              </h6>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item" href="#" id="mi-cuenta-link">
+                <span class="account-icon me-2">⚙️</span>
+                Mi Cuenta
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" id="modificar-perfil-link">
+                <span class="edit-icon me-2">✏️</span>
+                Modificar Perfil
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" id="info-servicio-link">
+                <span class="info-icon me-2">ℹ️</span>
+                Información de mi Servicio
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" id="lecturas-link">
+                <span class="lecturas-icon me-2">💧</span>
+                Lecturas de Medidores
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item text-danger" href="#" id="cerrar-sesion-link">
+                <span class="logout-icon me-2">🚪</span>
+                Cerrar Sesión
+              </a>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>

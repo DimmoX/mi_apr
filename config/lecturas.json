@@ -1,0 +1,148 @@
+{
+  "lecturas": [
+    {
+      "id": 1,
+      "idUsuario": 2,
+      "idMedidor": "MED-001",
+      "fechaLectura": "2025-06-01",
+      "horaLectura": "08:30",
+      "lecturaAnterior": 1250.75,
+      "lecturaActual": 1275.50,
+      "consumo": 24.75,
+      "observaciones": "Lectura normal",
+      "estado": "completada"
+    },
+    {
+      "id": 2,
+      "idUsuario": 2,
+      "idMedidor": "MED-001",
+      "fechaLectura": "2025-05-01",
+      "horaLectura": "09:15",
+      "lecturaAnterior": 1225.25,
+      "lecturaActual": 1250.75,
+      "consumo": 25.50,
+      "observaciones": "Lectura normal",
+      "estado": "completada"
+    },
+    {
+      "id": 3,
+      "idUsuario": 3,
+      "idMedidor": "MED-002",
+      "fechaLectura": "2025-06-02",
+      "horaLectura": "10:45",
+      "lecturaAnterior": 980.30,
+      "lecturaActual": 1005.80,
+      "consumo": 25.50,
+      "observaciones": "Medidor funcionando correctamente",
+      "estado": "completada"
+    },
+    {
+      "id": 4,
+      "idUsuario": 3,
+      "idMedidor": "MED-002",
+      "fechaLectura": "2025-05-02",
+      "horaLectura": "11:20",
+      "lecturaAnterior": 955.75,
+      "lecturaActual": 980.30,
+      "consumo": 24.55,
+      "observaciones": "Sin observaciones",
+      "estado": "completada"
+    },
+    {
+      "id": 5,
+      "idUsuario": 4,
+      "idMedidor": "MED-003",
+      "fechaLectura": "2025-06-03",
+      "horaLectura": "14:15",
+      "lecturaAnterior": 1520.90,
+      "lecturaActual": 1548.40,
+      "consumo": 27.50,
+      "observaciones": "Consumo elevado, revisar posibles fugas",
+      "estado": "completada"
+    },
+    {
+      "id": 6,
+      "idUsuario": 4,
+      "idMedidor": "MED-003",
+      "fechaLectura": "2025-05-03",
+      "horaLectura": "15:30",
+      "lecturaAnterior": 1495.20,
+      "lecturaActual": 1520.90,
+      "consumo": 25.70,
+      "observaciones": "Lectura normal",
+      "estado": "completada"
+    },
+    {
+      "id": 7,
+      "idUsuario": 2,
+      "idMedidor": "MED-001",
+      "fechaLectura": "2025-04-01",
+      "horaLectura": "08:45",
+      "lecturaAnterior": 1200.50,
+      "lecturaActual": 1225.25,
+      "consumo": 24.75,
+      "observaciones": "Lectura mensual rutinaria",
+      "estado": "completada"
+    },
+    {
+      "id": 8,
+      "idUsuario": 3,
+      "idMedidor": "MED-002",
+      "fechaLectura": "2025-04-02",
+      "horaLectura": "09:30",
+      "lecturaAnterior": 930.15,
+      "lecturaActual": 955.75,
+      "consumo": 25.60,
+      "observaciones": "Medidor calibrado correctamente",
+      "estado": "completada"
+    },
+    {
+      "id": 9,
+      "idUsuario": 4,
+      "idMedidor": "MED-003",
+      "fechaLectura": "2025-04-03",
+      "horaLectura": "16:00",
+      "lecturaAnterior": 1470.45,
+      "lecturaActual": 1495.20,
+      "consumo": 24.75,
+      "observaciones": "Sin novedades",
+      "estado": "completada"
+    },
+    {
+      "id": 10,
+      "idUsuario": 2,
+      "idMedidor": "MED-001",
+      "fechaLectura": "2025-03-01",
+      "horaLectura": "07:50",
+      "lecturaAnterior": 1175.80,
+      "lecturaActual": 1200.50,
+      "consumo": 24.70,
+      "observaciones": "Primera lectura del trimestre",
+      "estado": "completada"
+    },
+    {
+      "id": 11,
+      "idUsuario": 3,
+      "idMedidor": "MED-002",
+      "fechaLectura": "2025-03-02",
+      "horaLectura": "10:15",
+      "lecturaAnterior": 905.25,
+      "lecturaActual": 930.15,
+      "consumo": 24.90,
+      "observaciones": "Lectura estándar",
+      "estado": "completada"
+    },
+    {
+      "id": 12,
+      "idUsuario": 4,
+      "idMedidor": "MED-003",
+      "fechaLectura": "2025-03-03",
+      "horaLectura": "13:45",
+      "lecturaAnterior": 1445.50,
+      "lecturaActual": 1470.45,
+      "consumo": 24.95,
+      "observaciones": "Consumo dentro del rango normal",
+      "estado": "completada"
+    }
+  ]
+}

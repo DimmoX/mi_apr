@@ -1,28 +1,40 @@
 {
   "users": [
     {
-        "name": "Cuenta Admin",
+        "id": 1,
+        "name": "Admin",
+        "lastname": "Prueba",
+        "phone": "123456789",
         "email": "admin@apr.cl",
         "password": "Admin@123",
         "role": "admin"
     },
     {
-        "name": "Cuenta Cliente",
+        "id": 2,
+        "name": "Cliente",
+        "lastname": "Prueba",
+        "phone": "987654321",
         "email": "cliente@apr.cl",
         "password": "Cliente$456",
         "role": "cliente"
     },
     {
-        "name": "Cuenta Funcionario",
+        "id": 3,
+        "name": "Funcionario",
+        "lastname": "Prueba",
+        "phone": "456789123",
         "email": "funcionario@apr.cl",
         "password": "Func#789",
         "role": "funcionario"
     },
     {
-        "name": "Cuenta Técnico",
+        "id": 4,
+        "name": "Técnico",
+        "lastname": "Prueba",
+        "phone": "321654987",
         "email": "tecnico@apr.cl",
         "password": "Tecnico!012",
         "role": "tecnico"
     }
   ]
-}
+} 

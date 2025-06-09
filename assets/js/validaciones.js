@@ -175,15 +175,20 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Validación en tiempo real para email
+        /**
+         * Validación de campos email y contraseña
+         * Se valida el formato del email y la seguridad de la contraseña.
+         */
         const emailField = document.getElementById('email');
         const passwordField = document.getElementById('password');
         
         emailField.addEventListener('input', function() {
+            // Se obtiene el valor del campo email evitando espacios.
             const email = this.value.trim();
+            // Validar formato de email en tiempo real
+            const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
             if (email.length > 0) {
-                // Validar formato de email en tiempo real
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                if (validEmail) {
                     // No mostrar error en tiempo real, solo limpiar
                     limpiarError(this);
                 } else {
@@ -195,8 +200,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         passwordField.addEventListener('input', function() {
+            console.log('Validando contraseña en tiempo real: ', this);
+            // Remover errores previos
+            // Se obtiene el valor del campo password.
             const password = this.value;
-            
             // Solo mostrar indicador de fortaleza en register.html, no en login.html
             const currentPage = window.location.pathname.split('/').pop() || 'index.html';
             const isRegisterPage = currentPage === 'register.html';
@@ -262,8 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (user) {
                     loginExitoso();
 
-                    localStorage.setItem('login', 'true');
-                    localStorage.setItem('user', user.name);
+                    uploadDataUser(user);
                     
                     // Simular redirección después de 2 segundos
                     setTimeout(() => {
@@ -295,12 +301,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 const usuario = listaUsuarios.find(user => user.email === email);
                 return {
                     name: usuario.name,
+                    lastname: usuario.lastname,
+                    phone: usuario.phone,
                     email: usuario.email,
+                    password: usuario.password,
                     role: usuario.role
                 };
             } else {
                 return false
             }
+        }
+
+        function uploadDataUser(user) {
+           localStorage.setItem('login', 'true');
+           localStorage.setItem('name', user.name);
+           localStorage.setItem('lastname', user.lastname);
+           localStorage.setItem('phone', user.phone);
+           localStorage.setItem('email', user.email);
+           localStorage.setItem('role', user.role);
         }
     }
 });
@@ -525,123 +543,4 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-});
-
-// Función para configurar las rutas del navbar según la ubicación actual
-function setupNavbarPaths() {
-    const currentPath = window.location.pathname;
-    const currentPage = currentPath.split('/').pop() || 'index.html';
-    const isInSubfolder = currentPath.includes('/perfiles/');
-    const isLoginPage = currentPage === 'login.html';
-    
-    // Determinar el prefijo de ruta
-    const baseUrl = isInSubfolder ? '../' : '';
-    
-    // Configurar logo
-    const logoImg = document.querySelector('#logo');
-    if (logoImg) {
-        const logoSrc = baseUrl + 'assets/img/logo.png';
-        logoImg.src = logoSrc;
-    }
-    
-    // Configurar brand link
-    const brandLink = document.querySelector('.navbar-brand');
-    if (brandLink) {
-        const brandHref = baseUrl + 'index.html';
-        brandLink.href = brandHref;
-    }
-    
-    // Configurar enlaces de navegación
-    const navLinks = document.querySelectorAll('.navbar-nav .nav-link[data-page]');
-    navLinks.forEach(link => {
-        const page = link.getAttribute('data-page');
-        if (page) {
-            const fullUrl = baseUrl + page;
-            link.href = fullUrl;
-        }
-    });
-
-    // Gestionar botón de logout y visibilidad de "Iniciar Sesión" basado en estado de login
-    addLogoutButton();
-}
-
-// Función para añadir botón de cerrar sesión y ocultar "Iniciar Sesión"
-function addLogoutButton() {
-    const currentPath = window.location.pathname;
-    const currentPage = currentPath.split('/').pop() || 'index.html';
-    const isInProfilePage = currentPath.includes('/perfiles/');
-    const isLoginPage = currentPage === 'login.html';
-    const isLoggedIn = localStorage.getItem('login') === 'true';
-    
-    // Si el usuario está logueado, ocultar "Iniciar Sesión" y mostrar "Cerrar Sesión"
-    if (isLoggedIn && !isLoginPage) {
-        const navbarNav = document.querySelector('.navbar-nav');
-        
-        // Ocultar el enlace "Iniciar Sesión"
-        const loginLink = document.querySelector('a[data-page="login.html"]');
-        if (loginLink) {
-            loginLink.parentElement.style.display = 'none';
-        }
-        
-        // Verificar si ya existe el botón de logout para evitar duplicados
-        const existingLogout = document.querySelector('.logout-btn');
-        if (existingLogout) {
-            return; // Ya existe, no hacer nada
-        }
-        
-        if (navbarNav) {
-            // Crear el botón de cerrar sesión
-            const logoutItem = document.createElement('li');
-            logoutItem.className = 'nav-item';
-            
-            const logoutLink = document.createElement('a');
-            logoutLink.className = 'nav-link text-white logout-btn';
-            logoutLink.href = '#';
-            logoutLink.innerHTML = 'Cerrar Sesión';
-            logoutLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Mostrar confirmación
-                if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-                    // Limpiar cualquier dato de sesión si existe
-                    sessionStorage.clear();
-                    localStorage.removeItem('user');
-                    localStorage.removeItem('login');
-                    
-                    // Redirigir al login
-                    const redirectUrl = isInProfilePage ? '../index.html' : 'index.html';
-                    window.location.href = redirectUrl;
-                }
-            });
-            
-            logoutItem.appendChild(logoutLink);
-            navbarNav.appendChild(logoutItem);
-        }
-    } else if (!isLoggedIn) {
-        // Si no está logueado, asegurar que "Iniciar Sesión" esté visible
-        const loginLink = document.querySelector('a[data-page="login.html"]');
-        if (loginLink) {
-            loginLink.parentElement.style.display = 'block';
-        }
-        
-        // Remover botón de logout si existe
-        const existingLogout = document.querySelector('.logout-btn');
-        if (existingLogout) {
-            existingLogout.parentElement.remove();
-        }
-    }
-}
-
-// Event listener para detectar cambios en el estado de login
-window.addEventListener('storage', function(e) {
-    if (e.key === 'login') {
-        // Re-ejecutar la configuración del navbar cuando cambie el estado de login
-        addLogoutButton();
-    }
-});
-
-// También escuchar cambios directos en la página actual
-document.addEventListener('DOMContentLoaded', function() {
-    // Verificar estado de login cuando se carga cualquier página
-    addLogoutButton();
 });

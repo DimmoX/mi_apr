@@ -13,6 +13,32 @@
     --dark-color: #343a40;
 }
 
+/* =============================================================================
+   SOLUCIÓN PARA SCROLL CONSISTENTE
+   ============================================================================= */
+/* 
+   Problema: Cuando aparece el scroll vertical, la barra ocupa espacio (15-17px)
+   causando que todo el contenido se desplace hacia la izquierda.
+   
+   Solución: Reservar siempre el espacio para la barra de scroll, así todas las
+   páginas tienen el mismo comportamiento, con o sin scroll.
+*/
+
+/* Solución para evitar el desplazamiento del navbar cuando aparece el scroll */
+html {
+  overflow-y: scroll; /* Siempre mostrar el espacio para scroll vertical */
+  scrollbar-gutter: stable; /* Propiedad moderna para reservar espacio de scrollbar */
+}
+
+/* Optimización adicional: Hacer el scroll más suave */
+html {
+  scroll-behavior: smooth; /* Scroll suave para enlaces internos */
+}
+
+/* =============================================================================
+   ESTILOS BASE
+   ============================================================================= */
+
 body {
   background-color: var(--background-color);
   color: #333;
@@ -28,7 +54,7 @@ header {
     align-items: center;
     justify-content: center;
     text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
-    margin-top: 5rem;
+    margin-top: 4rem;
 }
 
 main {
@@ -40,6 +66,13 @@ nav {
   color: white;
   padding: 1rem;
   margin-bottom: 50px;
+}
+
+.dropdown-toggle {
+  background-color: transparent !important;
+  color: white !important;
+  text-decoration: none !important;
+  font-weight: 600;
 }
 
 #logo {
@@ -56,26 +89,48 @@ nav {
 .navbar-nav .nav-link {
   color: white !important;
   text-decoration: none !important;
-  font-weight: 500;
-  position: relative;
-  /* Remover transition que causa conflictos */
+  font-weight: 600;
 }
 
-/* Subrayado solo al pasar el mouse cuando NO está activo */
-.navbar-nav .nav-link:not(.active):hover {
-  text-decoration: underline !important;
+/* Asegurar que el dropdown NO tenga underline independientemente de nav-underline */
+.navbar-nav.nav-underline #user-dropdown-nav .dropdown-toggle {
+  text-decoration: none !important;
+  border-bottom: none !important;
 }
 
-/* Link activo: línea bajo el texto para todos los dispositivos */
-.navbar-nav .nav-link.active::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 3px;
-  width: 100%;
-  height: 3px;
-  background: #fff;
-  border-radius: 2px;
+/* Clases de utilidad para ocultar elementos completamente del layout */
+.navbar-nav .nav-item.hidden-completely {
+  display: none !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Asegurar que elementos ocultos no afecten flexbox */
+.navbar-nav .nav-item[style*="display: none"] {
+  flex: none !important;
+  width: 0 !important;
+  margin: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+  visibility: hidden !important;
+}
+
+/* Eliminar el elemento del flujo flexbox cuando está oculto */
+.navbar-nav .nav-item.completely-hidden {
+  display: none !important;
+  flex: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+  visibility: hidden !important;
 }
 
 /* Mejorar el colapso en móvil */
@@ -328,3 +383,280 @@ footer {
   border-color: var(--success-color);
   box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
 }
+
+/* Optimizaciones específicas para dispositivos móviles */
+@media (max-width: 768px) {
+  /* En móviles, el scroll suele ser overlay, pero mantenemos consistencia */
+  html {
+    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+  }
+  
+  /* Evitar zoom horizontal en dispositivos móviles */
+  body {
+    overflow-x: hidden;
+  }
+}
+
+/* =============================================================================
+   PERSONALIZACIÓN DEL SCROLLBAR
+   ============================================================================= */
+
+/* Scrollbar para navegadores Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px; /* Ancho más fino para estilo minimalista */
+  height: 8px; /* Alto del scrollbar horizontal también más fino */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Fondo transparente */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15); /* Thumb muy sutil */
+  border-radius: 4px;
+  border: 1px solid transparent; /* Borde más pequeño para scrollbar fino */
+  background-clip: content-box; /* El color solo se aplica al contenido, no al borde */
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3); /* Más visible al hacer hover */
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.5); /* Aún más visible al hacer clic */
+  background-clip: content-box;
+}
+
+/* Opcional: Ocultar las flechas del scrollbar */
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Para Firefox (experimental) */
+html {
+  scrollbar-width: thin; /* auto, thin, none */
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent; /* thumb sutil y track transparente */
+}
+
+/* =============================================================================
+   DROPDOWN DE USUARIO EN NAVBAR
+   ============================================================================= */
+
+/* Estilos para el dropdown de usuario */
+#user-dropdown-nav .dropdown-toggle {
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+/* Evitar que el dropdown herede el underline de nav-underline */
+#user-dropdown-nav .dropdown-toggle,
+#user-dropdown-nav .dropdown-toggle:hover,
+#user-dropdown-nav .dropdown-toggle:focus,
+#user-dropdown-nav .dropdown-toggle:active,
+#user-dropdown-nav .dropdown-toggle.show {
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+/* También eliminar cualquier pseudoelemento que pueda aparecer */
+#user-dropdown-nav .dropdown-toggle::after,
+#user-dropdown-nav .dropdown-toggle:hover::after,
+#user-dropdown-nav .dropdown-toggle:focus::after,
+#user-dropdown-nav .dropdown-toggle.active::after {
+  display: none !important;
+}
+
+#user-dropdown-nav .dropdown-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.25rem;
+}
+
+/* Estilos para el menú dropdown */
+#user-dropdown-nav .dropdown-menu {
+  border: none;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0;
+  min-width: 220px;
+}
+
+/* Header del dropdown con nombre completo */
+#user-dropdown-nav .dropdown-header {
+  color: var(--secondary-color);
+  font-weight: 600;
+  padding: 0.75rem 1rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Items del dropdown */
+#user-dropdown-nav .dropdown-item {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: #333;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+#user-dropdown-nav .dropdown-item:hover {
+  background-color: var(--grey-color);
+  color: var(--secondary-color);
+}
+
+/* Íconos emoji en el dropdown */
+#user-dropdown-nav .user-icon,
+#user-dropdown-nav .account-icon,
+#user-dropdown-nav .edit-icon,
+#user-dropdown-nav .info-icon,
+#user-dropdown-nav .lecturas-icon,
+#user-dropdown-nav .logout-icon {
+  font-size: 1rem;
+  width: 16px;
+  text-align: center;
+  display: inline-block;
+}
+
+/* Estilo especial para "Cerrar Sesión" */
+#user-dropdown-nav .dropdown-item.text-danger:hover {
+  background-color: rgba(229, 115, 115, 0.1);
+  color: var(--danger-color);
+}
+
+/* Divider del dropdown */
+#user-dropdown-nav .dropdown-divider {
+  margin: 0.5rem 1rem;
+  border-color: #e9ecef;
+}
+
+/* Responsive: En móvil, ajustar el dropdown */
+@media (max-width: 991.98px) {
+  #user-dropdown-nav .dropdown-menu {
+    position: static !important;
+    transform: none !important;
+    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.05);
+    margin-top: 0.5rem;
+  }
+  
+  #user-dropdown-nav .dropdown-item {
+    color: #333;
+  }
+}
+
+/* =============================================================================
+   ESTILOS PARA PÁGINA DE LECTURAS DE MEDIDORES
+   ============================================================================= */
+
+/* Estilos para la tabla de lecturas */
+.table th {
+  border-top: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.table td {
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+/* Responsive para tabla de lecturas */
+@media (max-width: 768px) {
+  .table-responsive {
+    font-size: 0.8rem;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  /* Ocultar columnas menos importantes en móvil */
+  .table th:nth-child(5),
+  .table td:nth-child(5),
+  .table th:nth-child(9),
+  .table td:nth-child(9) {
+    display: none;
+  }
+}
+
+/* Estilos para badges de estado */
+.badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Animaciones suaves para filtros */
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Estilos para estadísticas */
+.card-body h3 {
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.card-body h5 {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Modal de nueva lectura */
+.modal-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.modal-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+/* Alertas flotantes */
+.alert.position-fixed {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Mejorar visualización de números en la tabla */
+.table td span.badge {
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Estilos para iconos emoji */
+.card-title::before {
+  margin-right: 0.5rem;
+}
+
+/* Hover effects para botones */
+.btn:hover {
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* Estilos para el spinner de carga */
+.spinner-border {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* =============================================================================
