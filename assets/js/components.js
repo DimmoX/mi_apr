@@ -132,6 +132,17 @@ function addLogoutButton() {
         // Configurar enlaces del dropdown
         setupDropdownLinks(isInProfilePage);
         
+        // Mostrar enlace de gestión de usuarios solo para administradores
+        const userRole = localStorage.getItem('role');
+        const adminUsersLink = document.getElementById('admin-users-link');
+        if (adminUsersLink) {
+            if (userRole === 'admin') {
+                adminUsersLink.style.display = 'block';
+            } else {
+                adminUsersLink.style.display = 'none';
+            }
+        }
+        
     } else {
         // Usuario NO logueado: mostrar "Iniciar Sesión", ocultar dropdown
         if (loginNavItem) {
@@ -172,12 +183,11 @@ function setupDropdownLinks(isInProfilePage) {
         });
     }
     
-    // Información de mi Servicio
+    // Información de Servicio
     const infoServicioLink = document.getElementById('info-servicio-link');
     if (infoServicioLink) {
         infoServicioLink.addEventListener('click', function(e) {
             e.preventDefault();
-            // TODO: Implementar página de información del servicio
             alert('Funcionalidad de información del servicio en desarrollo');
         });
     }
@@ -202,15 +212,22 @@ function setupDropdownLinks(isInProfilePage) {
             e.preventDefault();
             
             if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-                // Limpiar datos de sesión
-                sessionStorage.clear();
-                localStorage.removeItem('user');
-                localStorage.removeItem('login');
+                // se limpian los datos de sesión
+                localStorage.clear();
                 
-                // Redirigir al inicio
+                // se redirige al inicio
                 const redirectUrl = isInProfilePage ? '../index.html' : 'index.html';
                 window.location.href = redirectUrl;
             }
+        });
+    }
+    
+    // Gestión de Usuarios (solo para administradores)
+    const adminUsersLink = document.getElementById('admin-users-link');
+    if (adminUsersLink) {
+        adminUsersLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = `${baseUrl}admin-users.html`;
         });
     }
 }

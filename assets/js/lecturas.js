@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function initializePage() {
     try {
-        // Verificar autenticación
+        // Verificar autenticación de usuario
         if (!checkAuthentication()) {
             return;
         }
@@ -73,15 +73,20 @@ async function loadData() {
     try {
         // Cargar lecturas
         const lecturasResponse = await fetch('config/lecturas.json');
+
+        console.log('Lecturas response:', lecturasResponse);
+
         if (!lecturasResponse.ok) {
             throw new Error('No se pudieron cargar las lecturas');
         }
         const lecturasJson = await lecturasResponse.json();
         lecturasData = lecturasJson.lecturas || [];
+
+        console.log('Lecturas cargadas:', lecturasData);
         
         // Cargar usuarios
         const usuariosResponse = await fetch('config/users.json');
-        if (!usuariosResponse.ok) {
+        if (usuariosResponse.status != 200) {
             throw new Error('No se pudieron cargar los usuarios');
         }
         const usuariosJson = await usuariosResponse.json();
@@ -290,44 +295,7 @@ function updateStatistics() {
 }
 
 function exportarDatos() {
-    const lecturas = getFilteredLecturas();
-    
-    if (lecturas.length === 0) {
-        showAlert('No hay datos para exportar.', 'warning');
-        return;
-    }
-    
-    // Crear CSV
-    const headers = ['ID', 'ID Medidor', 'Usuario', 'Fecha', 'Hora', 'Lectura Anterior', 'Lectura Actual', 'Consumo', 'Observaciones', 'Estado'];
-    const csvContent = [
-        headers.join(','),
-        ...lecturas.map(lectura => {
-            const usuario = usuariosData.find(u => u.id === lectura.idUsuario);
-            const nombreUsuario = usuario ? `${usuario.name} ${usuario.lastname}` : 'Desconocido';
-            
-            return [
-                lectura.id,
-                `"${lectura.idMedidor}"`,
-                `"${nombreUsuario}"`,
-                lectura.fechaLectura,
-                lectura.horaLectura,
-                lectura.lecturaAnterior,
-                lectura.lecturaActual,
-                lectura.consumo,
-                `"${lectura.observaciones || ''}"`,
-                lectura.estado
-            ].join(',');
-        })
-    ].join('\n');
-    
-    // Descargar archivo
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `lecturas_medidores_${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-    
-    showAlert('Datos exportados exitosamente.', 'success');
+    alert ('Funcionalidad de exportación en desarrollo.');
 }
 
 function nuevaLectura() {
@@ -391,6 +359,8 @@ function guardarNuevaLectura() {
         observaciones: document.getElementById('nuevas-observaciones').value,
         estado: 'completada'
     };
+
+    console.log('Nueva lectura a guardar:', nuevaLectura);
     
     // Simular guardado (en un entorno real, esto se enviaría al servidor)
     lecturasData.unshift(nuevaLectura);

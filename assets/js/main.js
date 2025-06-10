@@ -54,8 +54,52 @@ document.addEventListener('DOMContentLoaded', function() {
     placeholderLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            // Sin alert - no hace nada por ahora
             // console.log('Enlace clickeado:', link.textContent.trim());
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', async function() {
+    let currentPath = window.location.pathname;
+    let currentPage = currentPath.split('/').pop() || 'index.html';
+    let currentDirectory = currentPath.split('/');
+    let isInPerfilesDirectory = currentDirectory.includes('perfiles');
+
+    let pagePerfil = currentPath.split('/')[2];
+    console.log('pagePerfil:', pagePerfil);
+
+    // Cargar usuarios desde el JSON si no existen en localStorage
+    if (!localStorage.getItem('users')) {
+        try {
+            let basePath = isInPerfilesDirectory ? '../' : './';
+            let usersList = await fetch(`${basePath}config/users.json`);
+            let usersJson = await usersList.json();
+            // Guardar solo el array de usuarios, no la estructura completa
+            localStorage.setItem('users', JSON.stringify(usersJson.users || []));
+            console.log('Usuarios cargados en localStorage');
+        } catch (error) {
+            console.error('Error al cargar usuarios:', error);
+        }
+    }
+
+    let isLogin = localStorage.getItem('login');
+    let userRole = localStorage.getItem('role');
+
+    // Verificar autenticación en páginas de perfiles
+    if (isInPerfilesDirectory && !isLogin) {
+        // Redirigir a la página de login si no está autenticado
+        window.location.href = '../login.html';
+    } else if (isLogin && isInPerfilesDirectory && pagePerfil && pagePerfil.split('.')[0] !== userRole) {
+        window.location.href = '../noauth.html';
+    }
+
+    // Verificar acceso a páginas de administración
+    if (currentPage === 'admin-users.html' && (!isLogin || userRole !== 'admin')) {
+        window.location.href = 'noauth.html';
+    }
+});
+
+    // let currentPath = window.location.pathname;
+    // let currentPage = currentPath.split('/')[1];
+
+    // console.log('currentPage sin function:', currentPage);

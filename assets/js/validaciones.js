@@ -1,4 +1,3 @@
-
 // Función para validar seguridad de contraseña (función global)
 function validarSeguridadPassword(password) {
     const errores = [];
@@ -79,249 +78,93 @@ function mostrarFortalezaPassword(password, passwordField) {
     }
 }
 
-// Validaciones del formulario de login
-document.addEventListener('DOMContentLoaded', function() {
-    const loginForm = document.getElementById('loginForm');
+// Función para validar teléfono (función global)
+function validarTelefono(telefono) {
+    // Eliminar solo espacios, guiones y paréntesis para validación (mantener +)
+    const telefonoLimpio = telefono.replace(/[\s\-\(\)]/g, '');
     
-    if (loginForm) {
-        // Función para mostrar mensaje de error
-        function mostrarError(field, message) {
-            // Remover errores previos
-            limpiarError(field);
-            
-            // Añadir clase de error al campo
-            field.classList.add('is-invalid');
-            
-            // Crear elemento de feedback
-            const feedback = document.createElement('div');
-            feedback.className = 'invalid-feedback';
-            feedback.textContent = message;
-            
-            // Insertar después del campo
-            field.parentNode.appendChild(feedback);
+    // Verificar que solo contenga números, espacios, guiones, paréntesis y signo +
+    if (!/^\+?[\d\s\-\(\)]+$/.test(telefono)) {
+        return false;
+    }
+    
+    // Extraer solo los dígitos (sin + ni otros caracteres)
+    const soloDigitos = telefonoLimpio.replace(/\+/g, '');
+    
+    // Validaciones específicas
+    if (telefonoLimpio.startsWith('+')) {
+        // Formato internacional
+        // Chile: +56 + 9 dígitos = 12 caracteres total
+        // Otros países: entre 7 y 15 dígitos después del código de país
+        if (soloDigitos.length < 7 || soloDigitos.length > 15) {
+            return false;
         }
         
-        // Función para limpiar errores de un campo
-        function limpiarError(field) {
-            field.classList.remove('is-invalid');
-            const feedback = field.parentNode.querySelector('.invalid-feedback');
-            if (feedback) {
-                feedback.remove();
+        // Validación específica para Chile (+56)
+        if (telefonoLimpio.startsWith('+56')) {
+            // Teléfonos móviles chilenos: +56 9 XXXXXXXX (11 dígitos total después de +56)
+            // Teléfonos fijos chilenos: +56 X XXXXXXXX (9-10 dígitos después de +56)
+            const digitosDespuesDeCodigo = soloDigitos.substring(2); // Quitar "56"
+            if (digitosDespuesDeCodigo.length < 8 || digitosDespuesDeCodigo.length > 9) {
+                return false;
             }
         }
-        
-        // Función para mostrar mensaje de éxito
-        function loginExitoso() {
-            // Remover alertas previas
-            const existingAlert = document.querySelector('.alert');
-            if (existingAlert) {
-                existingAlert.remove();
-            }
-            
-            // Crear alerta de éxito
-            const alert = document.createElement('div');
-            alert.className = 'alert alert-custom-success alert-dismissible fade show mt-3';
-            alert.innerHTML = `
-                <strong>¡Éxito!</strong> Credenciales válidas. Redirigiendo...
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            
-            // Insertar antes del formulario
-            loginForm.parentNode.insertBefore(alert, loginForm);
-        }
-        
-        // Función para mostrar mensaje de error general
-        function loginError(message) {
-            // Remover alertas previas
-            const existingAlert = document.querySelector('.alert');
-            if (existingAlert) {
-                existingAlert.remove();
-            }
-            
-            // Crear alerta de error
-            const alert = document.createElement('div');
-            alert.className = 'alert alert-danger alert-dismissible fade show mt-3';
-            alert.innerHTML = `
-                <strong>Error:</strong> ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            
-            // Insertar antes del formulario
-            loginForm.parentNode.insertBefore(alert, loginForm);
-        }
-        
-        // Función para mostrar errores múltiples de contraseña
-        function mostrarErroresPassword(field, errores) {
-            // Limpiar errores previos
-            limpiarError(field);
-            
-            if (errores.length > 0) {
-                // Añadir clase de error al campo
-                field.classList.add('is-invalid');
-                
-                // Crear elemento de feedback con lista de errores
-                const feedback = document.createElement('div');
-                feedback.className = 'invalid-feedback';
-                
-                if (errores.length === 1) {
-                    feedback.textContent = errores[0];
-                } else {
-                    feedback.innerHTML = '<strong>La contraseña debe cumplir:</strong><ul class="mb-0 mt-1">' + 
-                        errores.map(error => `<li>${error}</li>`).join('') + '</ul>';
-                }
-                
-                // Insertar después del campo
-                field.parentNode.appendChild(feedback);
-            }
-        }
-
-        /**
-         * Validación de campos email y contraseña
-         * Se valida el formato del email y la seguridad de la contraseña.
-         */
-        const emailField = document.getElementById('email');
-        const passwordField = document.getElementById('password');
-        
-        emailField.addEventListener('input', function() {
-            // Se obtiene el valor del campo email evitando espacios.
-            const email = this.value.trim();
-            // Validar formato de email en tiempo real
-            const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-            if (email.length > 0) {
-                if (validEmail) {
-                    // No mostrar error en tiempo real, solo limpiar
-                    limpiarError(this);
-                } else {
-                    limpiarError(this);
-                }
-            } else {
-                limpiarError(this);
-            }
-        });
-        
-        passwordField.addEventListener('input', function() {
-            console.log('Validando contraseña en tiempo real: ', this);
-            // Remover errores previos
-            // Se obtiene el valor del campo password.
-            const password = this.value;
-            // Solo mostrar indicador de fortaleza en register.html, no en login.html
-            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-            const isRegisterPage = currentPage === 'register.html';
-            
-            if (password.length > 0) {
-                // Mostrar indicador de fortaleza solo en página de registro
-                if (isRegisterPage) {
-                    mostrarFortalezaPassword(password, this);
-                }
-                
-                // Solo limpiar errores si la contraseña es válida
-                const errores = validarSeguridadPassword(password);
-                if (errores.length === 0) {
-                    limpiarError(this);
-                }
-            } else {
-                limpiarError(this);
-                // Remover indicador de fortaleza solo si existe
-                if (isRegisterPage) {
-                    const indicador = this.parentNode.querySelector('.password-strength');
-                    if (indicador) {
-                        indicador.remove();
-                    }
-                }
-            }
-        });
-
-        // Manejo del envío del formulario
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const email = emailField.value.trim();
-            const password = passwordField.value;
-            let isValid = true;
-            
-            // Limpiar errores previos
-            limpiarError(emailField);
-            limpiarError(passwordField);
-            
-            // Validar email
-            if (!email) {
-                mostrarError(emailField, 'El email es requerido');
-                isValid = false;
-            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                mostrarError(emailField, 'Ingresa un email válido');
-                isValid = false;
-            }
-            
-            // Validar contraseña (solo requerida para login, no todas las reglas de seguridad)
-            if (!password) {
-                mostrarError(passwordField, 'La contraseña es requerida');
-                isValid = false;
-            } else if (password.length < 8) {
-                mostrarError(passwordField, 'La contraseña debe tener al menos 8 caracteres');
-                isValid = false;
-            }
-
-            // Si todo es válido, proceder con el login
-            if (isValid) {
-
-                const user = await validarCredenciales(email, password);
-
-                if (user) {
-                    loginExitoso();
-
-                    uploadDataUser(user);
-                    
-                    // Simular redirección después de 2 segundos
-                    setTimeout(() => {
-                        // se realiza redirección al perfil del usuario según su rol
-                        window.location.href = `perfiles/${user.role}.html`;
-                    }, 2000);
-                } else {
-                    loginError('Email o contraseña incorrectos');
-                }
-            }
-        });
-        
-        /**
-         * Función para validar las credenciales del usuario
-         * @param {*} email 
-         * @param {*} password 
-         * @returns {json || boolean}
-         */
-        async function validarCredenciales(email, password) {
-
-            let usuarios = await fetch('../config/users.json');
-            let usuariosJson = await usuarios.json();
-            let listaUsuarios = usuariosJson.users;
-
-            // Validar si el usuario existe por email
-            const usuarioValido = listaUsuarios.some(user => user.email === email && user.password === password);
-
-            if (usuarioValido) {
-                const usuario = listaUsuarios.find(user => user.email === email);
-                return {
-                    name: usuario.name,
-                    lastname: usuario.lastname,
-                    phone: usuario.phone,
-                    email: usuario.email,
-                    password: usuario.password,
-                    role: usuario.role
-                };
-            } else {
-                return false
-            }
-        }
-
-        function uploadDataUser(user) {
-           localStorage.setItem('login', 'true');
-           localStorage.setItem('name', user.name);
-           localStorage.setItem('lastname', user.lastname);
-           localStorage.setItem('phone', user.phone);
-           localStorage.setItem('email', user.email);
-           localStorage.setItem('role', user.role);
+    } else {
+        // Formato nacional
+        // Chile: 8-9 dígitos para móviles y fijos
+        if (soloDigitos.length < 8 || soloDigitos.length > 9) {
+            return false;
         }
     }
-});
+    
+    return true; // Teléfono válido
+}
+
+// Función para obtener mensaje de error específico del teléfono
+function obtenerErrorTelefono(telefono) {
+    // Eliminar solo espacios, guiones y paréntesis para validación (mantener +)
+    const telefonoLimpio = telefono.replace(/[\s\-\(\)]/g, '');
+    
+    // Verificar que solo contenga números, espacios, guiones, paréntesis y signo +
+    if (!/^\+?[\d\s\-\(\)]+$/.test(telefono)) {
+        return 'El teléfono solo puede contener números, espacios, guiones, paréntesis y signo +';
+    }
+    
+    // Extraer solo los dígitos (sin + ni otros caracteres)
+    const soloDigitos = telefonoLimpio.replace(/\+/g, '');
+    
+    // Validaciones específicas con mensajes detallados
+    if (telefonoLimpio.startsWith('+')) {
+        // Formato internacional
+        if (soloDigitos.length < 7) {
+            return 'El teléfono internacional debe tener al menos 7 dígitos después del código de país';
+        }
+        if (soloDigitos.length > 15) {
+            return 'El teléfono internacional no puede tener más de 15 dígitos después del signo +';
+        }
+        
+        // Validación específica para Chile (+56)
+        if (telefonoLimpio.startsWith('+56')) {
+            const digitosDespuesDeCodigo = soloDigitos.substring(2); // Quitar "56"
+            if (digitosDespuesDeCodigo.length < 8) {
+                return 'Los teléfonos chilenos deben tener al menos 8 dígitos después del código +56';
+            }
+            if (digitosDespuesDeCodigo.length > 9) {
+                return 'Los teléfonos chilenos no pueden tener más de 9 dígitos después del código +56';
+            }
+        }
+    } else {
+        // Formato nacional
+        if (soloDigitos.length < 8) {
+            return 'El teléfono debe tener al menos 8 dígitos';
+        }
+        if (soloDigitos.length > 9) {
+            return 'El teléfono no puede tener más de 9 dígitos para formato nacional';
+        }
+    }
+    
+    return null; // Sin errores
+}
 
 // Validaciones del formulario de registro
 document.addEventListener('DOMContentLoaded', function() {

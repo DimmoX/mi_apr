@@ -513,6 +513,7 @@ html {
 #user-dropdown-nav .edit-icon,
 #user-dropdown-nav .info-icon,
 #user-dropdown-nav .lecturas-icon,
+#user-dropdown-nav .admin-icon,
 #user-dropdown-nav .logout-icon {
   font-size: 1rem;
   width: 16px;
@@ -564,6 +565,125 @@ html {
   font-size: 0.9rem;
 }
 
+/* Corregir el problema de hover en la tabla - prevenir transformaciones */
+.table-hover tbody tr {
+  transition: background-color 0.15s ease-in-out !important;
+  transform: none !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  margin: 0 !important;
+  padding: inherit !important;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(79, 195, 247, 0.075) !important;
+  transform: none !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  margin: 0 !important;
+  padding: inherit !important;
+  animation: none !important;
+}
+
+/* Asegurar que las filas de tabla no se vean afectadas por otros efectos hover */
+.table tbody tr,
+.table tbody tr:hover,
+.table-striped tbody tr,
+.table-striped tbody tr:hover {
+  transform: none !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  margin: 0 !important;
+  animation: none !important;
+  transition: background-color 0.15s ease-in-out !important;
+}
+
+/* Sobrescribir cualquier efecto de Bootstrap que pueda estar causando el problema */
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+  transform: none !important;
+  position: static !important;
+  animation: none !important;
+}
+
+/* Solución específica para el problema de tabla deslizándose hacia arriba */
+.table-responsive .table,
+.table-responsive .table tbody,
+.table-responsive .table tbody tr,
+.table-responsive .table tbody tr td,
+.table-responsive .table tbody tr th {
+  transform: none !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  animation: none !important;
+  transition: background-color 0.15s ease-in-out !important;
+}
+
+/* Específicamente para el hover, usar solo cambio de color */
+.table-responsive .table-hover tbody tr:hover {
+  background-color: rgba(79, 195, 247, 0.075) !important;
+  transform: none !important;
+  position: static !important;
+  animation: none !important;
+}
+
+/* Anular cualquier efecto hover global que pueda estar interfiriendo */
+.container .table-responsive .table tbody tr:hover {
+  transform: none !important;
+  position: static !important;
+  margin: 0 !important;
+  padding: inherit !important;
+  animation: none !important;
+}
+
+/* ===== SOLUCIÓN FINAL PARA TABLA DESLIZÁNDOSE ===== */
+/* Máxima especificidad para sobrescribir Bootstrap y cualquier otro CSS */
+div.table-responsive table.table.table-striped.table-hover tbody tr {
+  transform: none !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  margin: 0 !important;
+  animation: none !important;
+  transition: background-color 0.15s ease-in-out !important;
+  will-change: auto !important;
+}
+
+div.table-responsive table.table.table-striped.table-hover tbody tr:hover {
+  background-color: rgba(79, 195, 247, 0.075) !important;
+  transform: none !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  margin: 0 !important;
+  animation: none !important;
+  transition: background-color 0.15s ease-in-out !important;
+  will-change: auto !important;
+}
+
+/* Deshabilitar transforms en toda la tabla y sus elementos */
+.table-responsive,
+.table-responsive *,
+.table,
+.table * {
+  transform: none !important;
+  animation: none !important;
+  will-change: auto !important;
+}
+
+/* Solo permitir hover suave en el color de fondo */
+.table-responsive .table tbody tr:hover {
+  background-color: rgba(79, 195, 247, 0.075) !important;
+  transform: none !important;
+}
+
 /* Responsive para tabla de lecturas */
 @media (max-width: 768px) {
   .table-responsive {
@@ -590,12 +710,28 @@ html {
   font-weight: 500;
 }
 
-/* Animaciones suaves para filtros */
-.card {
+/* Animaciones suaves para filtros - excluir elementos de tabla y card principal */
+.card:not(.table-responsive *):not(.lecturas-main-card) {
   transition: all 0.3s ease;
 }
 
-.card:hover {
+.card:hover:not(.table-responsive *):not(.lecturas-main-card) {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Asegurar que las cards de estadísticas no afecten la tabla */
+.card.border-primary,
+.card.border-success,
+.card.border-warning,
+.card.border-info {
+  transition: all 0.3s ease;
+}
+
+.card.border-primary:hover,
+.card.border-success:hover,
+.card.border-warning:hover,
+.card.border-info:hover {
   transform: translateY(-2px);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
@@ -647,8 +783,16 @@ html {
   margin-right: 0.5rem;
 }
 
-/* Hover effects para botones */
-.btn:hover {
+/* Hover effects para botones - excluir elementos de tabla */
+.btn:hover:not(.table *) {
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* Botones específicos fuera de tablas */
+.card-header .btn:hover,
+.modal-footer .btn:hover,
+.alert .btn:hover {
   transform: translateY(-1px);
   transition: all 0.2s ease;
 }
@@ -659,4 +803,588 @@ html {
   height: 2rem;
 }
 
+/* ===== EFECTO HOVER PERSONALIZADO PARA TABLA ===== */
+/* Crear nuestro propio efecto hover sin usar table-hover de Bootstrap */
+.table.table-striped tbody tr {
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out !important;
+  transform: none !important;
+  position: static !important;
+}
+
+.table.table-striped tbody tr:hover {
+  background-color: rgba(79, 195, 247, 0.1) !important;
+  transform: none !important;
+  position: static !important;
+  animation: none !important;
+}
+
+/* ===== EXCLUIR CARD PRINCIPAL DE LECTURAS DE EFECTOS HOVER ===== */
+/* La card principal de lecturas no debe tener efecto hover */
+.lecturas-main-card {
+  transition: none !important;
+  transform: none !important;
+}
+
+.lecturas-main-card:hover {
+  transition: none !important;
+  transform: none !important;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+/* Asegurar que la card principal mantenga su shadow original */
+.lecturas-main-card.shadow {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.lecturas-main-card.shadow:hover {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
 /* =============================================================================
+   ESTILOS PARA PÁGINA DE GESTIÓN DE USUARIOS (ADMIN)
+   ============================================================================= */
+
+/* Excluir la card principal de admin-users de efectos hover */
+.admin-users-main-card {
+  transition: none !important;
+  transform: none !important;
+}
+
+.admin-users-main-card:hover {
+  transition: none !important;
+  transform: none !important;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.admin-users-main-card.shadow {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.admin-users-main-card.shadow:hover {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+/* Estilos para la celda de contraseña con toggle */
+.password-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 150px;
+}
+
+.password-text {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  flex-grow: 1;
+  min-width: 0;
+  word-break: break-all;
+}
+
+.password-toggle {
+  border: none !important;
+  padding: 0.25rem 0.5rem !important;
+  min-width: 36px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent !important;
+  transition: all 0.2s ease;
+}
+
+.password-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  transform: none !important;
+}
+
+.password-toggle .eye-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* Estilos para badges de rol */
+.badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+}
+
+/* Grupos de botones de acción */
+.btn-group .btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  border-radius: 0.25rem;
+}
+
+.btn-group .btn:hover {
+  transform: none !important;
+}
+
+/* Responsive para tabla de usuarios */
+@media (max-width: 768px) {
+  .table-responsive {
+    font-size: 0.8rem;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.5rem 0.25rem;
+    white-space: nowrap;
+  }
+  
+  /* Ocultar columnas menos importantes en móvil */
+  .table th:nth-child(4),
+  .table td:nth-child(4) {
+    display: none;
+  }
+  
+  .password-cell {
+    min-width: 120px;
+  }
+  
+  .btn-group .btn {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.7rem;
+  }
+}
+
+/* Estilos para modales de usuario */
+.modal-body .form-control:focus,
+.modal-body .form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.25);
+}
+
+/* Indicadores de validación en modales */
+.modal-body .form-control.is-valid {
+  border-color: var(--success-color);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='m2.3 6.73.7-.7 1.5-1.5.7-.7-1.4-1.4-.7.7L1.6 5.13l-.7.7 1.4 1.4Z'/%3e%3c/svg%3e");
+}
+
+.modal-body .form-control.is-invalid {
+  border-color: var(--danger-color);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath d='m5.25 5.25 1.5 1.5m0-1.5-1.5 1.5'/%3e%3c/svg%3e");
+}
+
+/* Estilos para alertas de la página */
+.alert.position-fixed {
+  animation: slideInRight 0.3s ease-out;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Mejoras para estadísticas de usuarios */
+.card.border-primary:hover,
+.card.border-success:hover,
+.card.border-warning:hover,
+.card.border-info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.3s ease;
+}
+
+/* Estilos para filtros y búsqueda */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.25);
+}
+
+/* Spinner de carga en tabla */
+.spinner-border {
+  width: 2rem;
+  height: 2rem;
+  color: var(--primary-color) !important;
+}
+
+/* Botones del header */
+.card-header .btn:hover {
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+.card-header .btn-light:hover {
+  background-color: #f8f9fa;
+  border-color: #f8f9fa;
+}
+
+.card-header .btn-outline-light:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ===== PERFIL DE TÉCNICO ===== */
+
+/* Contenedor principal del perfil de técnico */
+.technic-profile-main-card {
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+/* Header del perfil */
+.technic-profile-main-card .card-header {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border: none;
+  padding: 1.5rem;
+}
+
+.technic-profile-main-card .card-header h3 {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+/* Campos editables */
+.form-control.editable {
+  border: 2px solid var(--primary-color);
+  background-color: #f8f9ff;
+  transition: all 0.3s ease;
+}
+
+.form-control.editable:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.25);
+  background-color: #ffffff;
+}
+
+/* Campos de solo lectura */
+.form-control[readonly] {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+  cursor: default;
+}
+
+/* Sección de contraseña */
+.password-section {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #dee2e6;
+}
+
+.password-section h6 {
+  color: #6c757d;
+  font-weight: 600;
+}
+
+/* Botones de acción */
+.action-buttons {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #dee2e6;
+}
+
+/* Botón de toggle edición */
+#edit-toggle-btn {
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+#edit-toggle-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+/* Panel de control técnico */
+.card-header.bg-info {
+  background: linear-gradient(135deg, #17a2b8, #138496) !important;
+}
+
+/* Estadísticas del panel técnico */
+.bg-primary,
+.bg-success,
+.bg-warning,
+.bg-danger {
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.bg-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 123, 255, 0.3);
+}
+
+.bg-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(40, 167, 69, 0.3);
+}
+
+.bg-warning:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(255, 193, 7, 0.3);
+}
+
+.bg-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(220, 53, 69, 0.3);
+}
+
+/* Botones de acciones disponibles */
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover,
+.btn-outline-success:hover,
+.btn-outline-warning:hover {
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* Validaciones */
+.form-control.is-invalid {
+  border-color: var(--danger-color);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath d='m5.25 5.25 1.5 1.5m0-1.5-1.5 1.5'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2.75rem;
+}
+
+.invalid-feedback {
+  font-size: 0.875rem;
+  color: var(--danger-color);
+  font-weight: 500;
+}
+
+/* Toggle de contraseñas */
+.input-group .btn-outline-secondary {
+  border-color: #ced4da;
+}
+
+.input-group .btn-outline-secondary:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+/* Iconos de FontAwesome */
+.fas {
+  color: inherit;
+}
+
+/* Responsive design para técnico */
+@media (max-width: 768px) {
+  .technic-profile-main-card .card-header {
+    padding: 1rem;
+  }
+  
+  .technic-profile-main-card .card-header h3 {
+    font-size: 1.25rem;
+  }
+  
+  .d-flex.gap-2 {
+    flex-direction: column !important;
+  }
+  
+  .d-flex.gap-2 .btn {
+    margin-bottom: 0.5rem;
+  }
+  
+  .col-md-3 {
+    margin-bottom: 1rem !important;
+  }
+}
+
+/* Animaciones */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Notificaciones */
+.alert.position-fixed {
+  animation: slideInRight 0.3s ease-out;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Mejoras visuales adicionales */
+.card {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.form-label i {
+  color: var(--primary-color);
+}
+
+/* ===== PERFIL DE FUNCIONARIO ===== */
+
+/* Contenedor principal del perfil de funcionario */
+.funcionario-profile-main-card {
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+/* Header del perfil */
+.funcionario-profile-main-card .card-header {
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+  border: none;
+  padding: 1.5rem;
+}
+
+.funcionario-profile-main-card .card-header h3 {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+/* Panel de gestión administrativa */
+.card-header.bg-warning {
+  background: linear-gradient(135deg, #ffc107, #e0a800) !important;
+  color: #212529 !important;
+}
+
+/* Estilos específicos para funcionario */
+.bg-info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(23, 162, 184, 0.3);
+}
+
+.bg-warning.text-dark:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(255, 193, 7, 0.3);
+}
+
+/* Responsive para funcionario */
+@media (max-width: 768px) {
+  .funcionario-profile-main-card .card-header {
+    padding: 1rem;
+  }
+  
+  .funcionario-profile-main-card .card-header h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* ===== PERFIL DE ADMINISTRADOR ===== */
+
+/* Contenedor principal del perfil de administrador */
+.admin-profile-main-card {
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+/* Header del perfil */
+.admin-profile-main-card .card-header {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  border: none;
+  padding: 1.5rem;
+}
+
+.admin-profile-main-card .card-header h3 {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+/* Panel de control de administrador */
+.card-header.bg-dark {
+  background: linear-gradient(135deg, #343a40, #23272b) !important;
+}
+
+/* Estilos específicos para administrador */
+.card-header.bg-secondary {
+  background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+}
+
+/* Efectos hover para botones de administrador */
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover,
+.btn-outline-success:hover,
+.btn-outline-warning:hover,
+.btn-outline-info:hover {
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+/* Cards de actividades */
+.card.bg-light {
+  border: 1px solid #dee2e6;
+}
+
+.card.bg-light:hover {
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+/* Lista de actividades */
+.list-unstyled li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.list-unstyled li:last-child {
+  border-bottom: none;
+}
+
+/* Iconos de actividades */
+.text-success {
+  color: #28a745 !important;
+}
+
+.text-warning {
+  color: #ffc107 !important;
+}
+
+.text-info {
+  color: #17a2b8 !important;
+}
+
+/* Responsive para administrador */
+@media (max-width: 768px) {
+  .admin-profile-main-card .card-header {
+    padding: 1rem;
+  }
+  
+  .admin-profile-main-card .card-header h3 {
+    font-size: 1.25rem;
+  }
+  
+  .d-flex.flex-wrap.gap-2 .btn {
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+}
+
+/* Mejoras visuales para el panel de administrador */
+.bg-primary.p-3.rounded:hover,
+.bg-success.p-3.rounded:hover,
+.bg-info.p-3.rounded:hover,
+.bg-warning.p-3.rounded:hover {
+  transform: translateY(-3px);
+  transition: all 0.3s ease;
+}
+
+/* Animación para estadísticas */
+.bg-primary.p-3.rounded {
+  cursor: pointer;
+}
+
+.bg-success.p-3.rounded {
+  cursor: pointer;
+}
+
+.bg-info.p-3.rounded {
+  cursor: pointer;
+}
+
+.bg-warning.text-dark.p-3.rounded {
+  cursor: pointer;
+}
